@@ -9,6 +9,8 @@ let users;
 let currentUser;
 let channels;
 let currentChannelId;
+let groups;
+let currentGroupId; //don't know if needed
 
 const UNKNOWN_USER_NAME = 'Unknown User';
 // This is a hack to make the message list scroll to the bottom whenever a message is sent.
@@ -172,6 +174,21 @@ slack.init((data, ws) => {
     components.userList.setItems(users.map(slackUser => slackUser.name));
     components.screen.render();
   });
+  slack.getGroups((error, response, userData) => {
+      if (error || response.statusCode !== 200) {
+          console.log( // eslint-disable-line no-console
+              'Error: ', error, response || response.statusCode
+          );
+          return;
+      }
+      const parsedGroupData = JSON.parse(userData);
+      groups = parsedGroupData.groups.filter(groups => !groups.is_archived);
+
+      components.groupsList.setItems(
+          groups.map(slackGroup => slackGroup.name)
+      );
+      components.screen.render();
+  })
 });
 
 // set the channel list
