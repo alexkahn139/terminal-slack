@@ -129,16 +129,15 @@ module.exports = {
     },
     openGroup(id, callback) {
         slackRequest('groups.open', {
-            group: id,
+            groups: id,
         }, (error, response, data) => {
             if (callback) {
                 callback(error, response, data);
             }
         });
     },
-    //mark group
     markGroup(id, timestamp, callback) {
-        slackRequest('im.mark', {
+       slackRequest('groups.mark', {
             channel: id,
             ts: timestamp,
         }, (error, response, data) => {
@@ -147,7 +146,6 @@ module.exports = {
             }
         });
     },
-    //history group
     getGroupHistory(id, callback) {
         slackRequest('groups.history', {
             channel: id,
